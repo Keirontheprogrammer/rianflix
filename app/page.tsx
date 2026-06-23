@@ -1,28 +1,77 @@
-import { getTrending, getTitle, formatRating } from '@/lib/tmdb'
+import {
+  getTrending,
+  getPopularMovies,
+  getPopularTV,
+  getPopularAnime,
+  getTopRatedMovies,
+  getTopRatedAnime,
+} from '@/lib/tmdb'
+import HeroBanner from '@/components/layout/HeroBanner'
+import ContentRow from '@/components/layout/ContentRow'
+import Navbar from '@/components/layout/Navbar'
 
-export default async function Home() {
-  const trending = await getTrending('all', 'week')
+// this is a Server Component — all data fetching happens on the server
+// multiple fetches run in parallel with Promise.all for speed
+export default async function HomePage() {
+  const [
+    trending,
+    popularMovies,
+    popularTV,
+    popularAnime,
+    topRatedMovies,
+    topRatedAnime,
+  ] = await Promise.all([
+    getTrending('all', 'week'),
+    getPopularMovies(),
+    getPopularTV(),
+    getPopularAnime(),
+    getTopRatedMovies(),
+    getTopRatedAnime(),
+  ])
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-medium text-brand-yellow mb-6">
-        TMDB Connection Test ✓
-      </h1>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {trending.results.slice(0, 8).map(item => (
-          <div key={item.id} className="bg-brand-card border border-brand-border rounded-lg p-4">
-            <p className="text-white text-sm font-medium truncate">
-              {getTitle(item)}
-            </p>
-            <p className="text-brand-yellow text-xs mt-1">
-              ★ {formatRating(item.vote_average)}
-            </p>
-            <p className="text-gray-500 text-xs mt-1 capitalize">
-              {item.media_type}
-            </p>
-          </div>
-        ))}
+    <>
+      <Navbar />
+      {/* hero banner uses trending results */}
+      <HeroBanner items={trending.results} />
+
+      <div className="mt-6 tv:mt-10 pb-16">
+        <ContentRow
+          title="Trending This Week"
+          items={trending.results}
+          seeAllHref="/movies"
+        />
+        <ContentRow
+          title="Popular Movies"
+          items={popularMovies.results}
+          mediaType="movie"
+          seeAllHref="/movies"
+        />
+        <ContentRow
+          title="Popular Series"
+          items={popularTV.results}
+          mediaType="tv"
+          seeAllHref="/series"
+        />
+        <ContentRow
+          title="Top Rated Anime"
+          items={topRatedAnime.results}
+          isAnime
+          seeAllHref="/anime"
+        />
+        <ContentRow
+          title="Popular Anime"
+          items={popularAnime.results}
+          isAnime
+          seeAllHref="/anime"
+        />
+        <ContentRow
+          title="Top Rated Movies"
+          items={topRatedMovies.results}
+          mediaType="movie"
+          seeAllHref="/movies"
+        />
       </div>
-    </div>
+    </>
   )
 }
