@@ -10,8 +10,7 @@ import HeroBanner from '@/components/layout/HeroBanner'
 import ContentRow from '@/components/layout/ContentRow'
 import Navbar from '@/components/layout/Navbar'
 
-// this is a Server Component — all data fetching happens on the server
-// multiple fetches run in parallel with Promise.all for speed
+
 export default async function HomePage() {
   const [
     trending,
