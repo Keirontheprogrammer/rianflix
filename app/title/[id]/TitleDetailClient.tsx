@@ -3,10 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import {
-  Play, Bookmark, BookmarkCheck,
-  Star, Calendar, Clock, Tv, Film
-} from 'lucide-react'
+
+import {Play, Bookmark, BookmarkCheck, Star, Calendar, Clock, Tv, Film, Home} from 'lucide-react'
 import { TMDBMedia, TMDBCast, TMDBGenre } from '@/types/tmdb'
 import { IMG } from '@/lib/tmdb'
 import VideoPlayer from '@/components/ui/VideoPlayer'
@@ -115,6 +113,16 @@ export default function TitleDetailClient({
       )}
 
       <div className="min-h-screen">
+        <div className='absolute top-4 left-4 md:left-8 tv:left-16 z-10'>
+          <Link 
+            href="/"
+            className='flex items-center gap-2 bg-black/50 hover:bg-black/80 backdrop-blur-sm text-white text-sm tv:text-tv-sm px-4 py-2 tv:px-6 tv:py-3 rounded-full border border-white/20 transition-colors tv-focusable'
+
+            >
+              <Home size={15} className="tv:w-5 tv:h-5" />
+              <span>Home</span>
+            </Link>
+        </div>
         {/* backdrop hero */}
         <div className="relative w-full h-[50vw] min-h-[280px] max-h-[560px] tv:max-h-[700px]">
           <Image
