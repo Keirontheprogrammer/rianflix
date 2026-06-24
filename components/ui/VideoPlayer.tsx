@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, AlertTriangle, Play, Monitor } from 'lucide-react'
+import { X, AlertTriangle, Play, Monitor, Home } from 'lucide-react'
+
+import Link from 'next/link'
 
 interface VideoPlayerProps {
   tmdbId: number
@@ -13,18 +15,14 @@ interface VideoPlayerProps {
 }
 
 const SOURCES = [
+
   { 
     name: 'Source 1', 
-    getUrl: (id: number, type: string, s: number, e: number) =>
-      type === 'movie' ? `https://vidsrc.to/embed/movie/${id}` : `https://vidsrc.to/embed/tv/${id}/${s}/${e}`
-  },
-  { 
-    name: 'Source 2', 
     getUrl: (id: number, type: string, s: number, e: number) =>
       type === 'movie' ? `https://vidsrc.me/embed/movie?tmdb=${id}` : `https://vidsrc.me/embed/tv?tmdb=${id}&season=${s}&episode=${e}`
   },
   { 
-    name: 'Source 3', 
+    name: 'Source 2', 
     getUrl: (id: number, type: string, s: number, e: number) =>
       type === 'movie' ? `https://www.2embed.cc/embed/${id}` : `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`
   },
@@ -48,11 +46,6 @@ export default function VideoPlayer({
     ? SOURCES[selectedSource].getUrl(tmdbId, mediaType, s, e)
     : null
 
-  // prevent background scroll
-  useEffect(() => {
-    document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = 'unset' }
-  }, [])
 
   // reset loaded state when switching sources
   useEffect(() => {
@@ -63,7 +56,19 @@ export default function VideoPlayer({
     <div className="fixed inset-0 z-50 bg-black flex flex-col">
       {/* top bar */}
       <div className="flex items-center justify-between px-4 py-3 tv:px-8 tv:py-4 bg-black/80 border-b border-brand-border flex-shrink-0">
-        <div>
+      <div className='flex items-center gap-4'>
+        {/* HOME */}
+        <Link href="/" 
+        className="flex items-center gap-1.5 text-gray-400 hover:text-brand-yellow transition-colors text-sm tv-focusable"
+        onClick={()=> { document.body.style.overflow = 'unset' }}
+        >
+          <Home size={16} className="tv:w-5 tv:h-5"/>
+          <span className='hidden md:inline'>Home</span>
+        </Link>
+
+        <div className='w-px h-4 bg-brand-border'/>
+
+         <div>
           <p className="text-white font-medium text-sm tv:text-tv-base">{title}</p>
           {mediaType === 'tv' && (
             <p className="text-gray-500 text-xs tv:text-tv-sm">
@@ -71,6 +76,9 @@ export default function VideoPlayer({
             </p>
           )}
         </div>
+
+      </div>
+       
         <div className="flex items-center gap-3">
           {selectedSource !== null && (
             <button
@@ -143,7 +151,7 @@ export default function VideoPlayer({
             allowFullScreen
             onLoad={() => setLoaded(true)}
             className={`w-full h-full transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-            
+          
           />
         )}
       </div>
