@@ -25,7 +25,8 @@ export default function Navbar() {
 
   // get current logged in user
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    const supabaseClient = createClient()
+    supabaseClient.auth.getUser().then(({ data }) => {
       if (data.user) setUser({ email: data.user.email ?? '' })
     })
   }, [])

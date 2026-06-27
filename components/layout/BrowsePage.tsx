@@ -35,11 +35,7 @@ const textColorMap = {
   purple: 'text-purple-400',
 }
 
-const borderColorMap = {
-  orange: 'border-brand-orange',
-  cyan:   'border-cyan-500',
-  purple: 'border-purple-500',
-}
+
 
 export default function BrowsePage({
   heading,
