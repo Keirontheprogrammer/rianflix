@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'RyaFlix ',
   description: 'Stream the latest movies, TV series and anime on RianFlix.',
   icons: {
-    icon: '/icon.jpg'
+    icon: '/icon.jpeg'
   }
 }
 
