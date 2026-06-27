@@ -30,11 +30,11 @@ export default async function TitlePage({ params, searchParams }: TitlePageProps
   const title = getTitle(details)
   const year = getYear(details)
   const director = 'credits' in details
-    ? details.credits.crew.find(c => c.job === 'Director')?.name
-    : undefined
+  ? details.credits?.crew?.find(c => c.job === 'Director')?.name
+  : undefined
 
   // top 8 cast members
-  const cast = details.credits.cast.slice(0, 8)
+  const cast = details.credits?.cast?.slice(0, 8) ?? []
 
   // runtime string
   const runtime = mediaType === 'movie' && 'runtime' in details && details.runtime
