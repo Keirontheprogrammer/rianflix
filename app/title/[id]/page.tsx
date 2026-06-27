@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getMovieDetails, getTVDetails, getTrailer, IMG, getTitle, getYear, formatRating, formatRuntime } from '@/lib/tmdb'
+import { getMovieDetails, getTVDetails, getTrailer, getTitle, getYear, formatRating, formatRuntime } from '@/lib/tmdb'
 import { TMDBMovieDetails, TMDBTVDetails } from '@/types/tmdb'
 import TitleDetailClient from './TitleDetailClient'
 

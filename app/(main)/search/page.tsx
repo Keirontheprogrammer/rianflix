@@ -26,7 +26,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       {query ? (
         <p className="text-gray-400 text-sm tv:text-tv-sm mb-6">
           {results.total_results} results for{' '}
-          <span className="text-white font-medium">"{query}"</span>
+          <span className="text-white font-medium">&quot;{query}&quot;</span>
         </p>
       ) : (
         <p className="text-gray-500 text-sm tv:text-tv-sm mb-6">

@@ -169,7 +169,7 @@ export default function TitleDetailClient({
               {/* tagline */}
               {tagline && (
                 <p className="text-gray-500 text-sm tv:text-tv-sm italic mb-3">
-                  "{tagline}"
+                  &quot;{tagline}&quot;
                 </p>
               )}
 
