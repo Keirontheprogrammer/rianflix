@@ -15,8 +15,7 @@ export default async function TitlePage({ params, searchParams }: TitlePageProps
 
   if (isNaN(id)) notFound()
 
-  // fetch full details
-  let details: TMDBMovieDetails | TMDBTVDetails
+  let details: TMDBMovieDetails | TMDBTVDetails | null = null
 
   try {
     details = mediaType === 'tv'
@@ -26,25 +25,35 @@ export default async function TitlePage({ params, searchParams }: TitlePageProps
     notFound()
   }
 
-  const trailer = getTrailer(details.videos)
-  const title = getTitle(details)
-  const year = getYear(details)
-  const director = 'credits' in details
-  ? details.credits?.crew?.find(c => c.job === 'Director')?.name
-  : undefined
+  if (!details) notFound()
 
-  // top 8 cast members
+  // Safe access with fallbacks
+  const trailer = details.videos?.results
+    ? getTrailer(details.videos)
+    : null
+
+  // Wrap helpers in try/catch or ensure they handle missing data
+  const title = getTitle(details) ?? 'Untitled'
+  const year = getYear(details) ?? 'Unknown'
+  const rating = details.vote_average != null 
+    ? formatRating(details.vote_average) 
+    : 'N/A'
+
+  const director = details.credits?.crew?.find(c => c.job === 'Director')?.name ?? undefined
   const cast = details.credits?.cast?.slice(0, 8) ?? []
+  const similar = details.similar?.results?.slice(0, 12) ?? []
+  const genres = details.genres ?? []
 
-  // runtime string
   const runtime = mediaType === 'movie' && 'runtime' in details && details.runtime
     ? formatRuntime(details.runtime)
     : undefined
 
-  
   const numberOfSeasons = mediaType === 'tv' && 'number_of_seasons' in details
     ? details.number_of_seasons
     : undefined
+
+  const tagline = 'tagline' in details ? details.tagline : undefined
+  const status = 'status' in details ? details.status : undefined
 
   return (
     <TitleDetailClient
@@ -53,20 +62,20 @@ export default async function TitlePage({ params, searchParams }: TitlePageProps
       isAnime={isAnime}
       title={title}
       year={year}
-      overview={details.overview}
-      backdropPath={details.backdrop_path}
-      posterPath={details.poster_path}
-      rating={formatRating(details.vote_average)}
-      voteCount={details.vote_count}
-      genres={details.genres}
+      overview={details.overview ?? ''}
+      backdropPath={details.backdrop_path ?? null}
+      posterPath={details.poster_path ?? null}
+      rating={rating}
+      voteCount={details.vote_count ?? 0}
+      genres={genres}
       cast={cast}
-      similar={details.similar.results.slice(0, 12)}
+      similar={similar}
       trailerKey={trailer?.key ?? null}
       director={director}
       runtime={runtime}
       numberOfSeasons={numberOfSeasons}
-      tagline={'tagline' in details ? details.tagline : undefined}
-      status={details.status}
+      tagline={tagline}
+      status={status ?? 'Unknown'}
     />
   )
 }
